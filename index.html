@@ -1,10 +1,67 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>CSCI 4830</title>
-</head>
-<body>
-	<h1>Hello, World!</h1>
-</body>
+    <head>
+        <title> Contact form </title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="style.css" = type="text/css" media="all" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+    </head>
+    <body>
+        <h1> CONTACT FORM </h1>
+        <div class="contact-form">
+            <label> NAME </Label> <br />
+                <input class="textinput" type="text" name="name" placeholder="Full Name" data-bind="textInput: name" required> <br />
+                
+                <label> E-MAIL </Label> <br />
+                <input class="textinput" type="email" name="e-mail" placeholder="E-mail" data-bind="textInput: email" required> <br />
+                
+                <label> SUBJECT </Label> <br />
+                <input class="textinput" type="text" name="subject" placeholder="Subject" data-bind="textInput: subject" required> <br />
+                    
+                <label> MESSAGE </Label> <br />
+                <textarea class="textbox" name="message" placeholder="Type your Message here..." data-bind="textInput: message" required></textarea> <br />
+                <input class="button1" type="submit" name ="submit" value="SUBMIT" data-bind="click: send">
+        </div>
+        <script>
+            $(document).ready(() => {
+                var koViewModel = function() 
+                {
+                    var attr = this;
+
+                    attr.name = ko.observable('');
+                    attr.email = ko.observable('');
+                    attr.subject = ko.observable('');
+                    attr.message = ko.observable('');
+
+                    attr.send = () => {
+                        if(attr.name() && attr.email() && attr.subject() && attr.message()) 
+                        {
+                            var info = {
+                                "submit": true,
+                                "name": attr.name(),
+                                "e-mail": attr.email(),
+                                "subject": attr.subject(),
+                                "message": attr.message()
+                            };
+
+                            $.post("contactform.php", info, (serverResponse) => {
+                                console.log(serverResponse);
+                                alert("The form was submitted");
+
+                                attr.name('');
+                                attr.email('');
+                                attr.subject('');
+                                attr.message('');
+                            });
+                        }
+                    };
+                }
+
+                ko.applyBindings(new koViewModel());
+            });
+        </script>
+    </body>
 </html>
+        
+
